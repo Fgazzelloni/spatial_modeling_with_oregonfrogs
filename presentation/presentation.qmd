@@ -1,0 +1,344 @@
+---
+title: "Spatial Modeling with OregonFrogs"
+author: "Federica Gazzelloni"
+date: "April 8 2023"
+format: 
+  oregonfrogs-revealjs:
+    footer: "[Spatial Modeling with OregonFrogs](https://github.com/Fgazzelloni/oregonfrogs) - R4DS Project-Club 2023"
+    # revealjs: default
+    pointer:
+       pointerSize: 18
+       color: '#32cd32'
+revealjs-plugins:
+  - pointer
+    
+incremental: true
+embed-resources: true
+# editor: 
+#   markdown: 
+#     wrap: 82
+# this is not used to publish the presentation on quartopub
+# server: shiny
+---
+
+## A little about myself:<br>Federica Gazzelloni {.side-text}
+
+-   Email:[fede.gazzelloni\@gmail.com](mailto:fede.gazzelloni@gmail.com){.email}
+
+-   Twitter: [\@fgazzelloni](https://twitter.com/FGazzelloni)
+
+-   GitHub: <https://github.com/Fgazzelloni>
+
+-   Blog: <https://federicagazzelloni.netlify.app/>
+
+# Hello! {.smaller}
+
+::: columns
+::: {.column width="30%"}
+![](images/fg_image.png)
+:::
+
+::: {.column width="70%"}
+-   Federica is a statistician and actuary who works as an independent researcher.
+    She is always open to new insights about data modeling and visualization and
+    is an enthusiast of the R programming language. Federica enjoys finding hidden
+    patterns and learning new things.
+:::
+:::
+
+-   Federica also works on improving modeling techniques, she is interested in
+    infectious diseases and spatial data with R. Furthermore, she is the author of
+    the package `Oregonfrogs` where she shares her insights and experiences on
+    data analysis and visualization. She is also working on an insightful book
+    about
+    `Health metrics and the spread of infectious diseases with machine learning applications and spatial model analysis`
+    which includes a package called infectious. Eventually, she has reviewed
+    various articles in her field.
+
+# 
+
+I have always liked that `law of large numbers (LLN)`, which states:
+
+> "It guarantees stable long-term results for the averages of some random events"
+
+```{r}
+#| echo: false
+#| out-width: 100%
+#| fig-show: hold
+#| fig-align: center
+#| fig-cap: "[Wikipedia](https://en.wikipedia.org/wiki/Law_of_large_numbers)"
+knitr::include_graphics("images/Lawoflargenumbers.png")
+```
+
+## How I keep going learning and practicing? {.smaller}
+
+-   `R-Ladies` events for learning and networking. It's a good environment for
+    practicing organizing tutorials.
+-   The [`R4DS community`](https://rfordatascience.slack.com/), I enjoys
+    statistics, book clubs and learn advanced modeling techniques. This can be
+    challenging sometimes.
+-   `IHME` as a collaborator, author, and reviewer, I read papers and propose
+    changes. It is a rewarding experience.
+
+::: columns
+::: {.column width="33%"}
+![](images/R-LadiesGlobal.png){width="70%"}
+:::
+
+::: {.column width="33%"}
+![](images/r4ds.png)
+:::
+
+::: {.column width="33%"}
+![](images/ihme.png){width="70%"}
+:::
+:::
+
+# OregonFrogs
+
+## A trip to Spatial Modeling with R {.smaller}
+
+This is my project package for spatial modeling. I stomped into this set of data
+during a data-search for a visualization, and immediately saw its potential. It is
+a simple collection of information about a species of frog `Rana Pretiosa` which
+is found in Oregon around the area of the `Crane Prairie Reservoir` an artificial
+lake. Frogs are studied in their habitat and monitored with a `Radio Telemetry`.
+Frequencies identify the frog location releasing information about the frogs, if
+they are visualized, not visualized or captured, and in what habitat.
+
+> Original source of data is a @USGS study from Pearl, C.A., Rowe, J.C., McCreary,
+> B., and Adams, M.J., 2022. Geological Survey data release:
+> <https://doi.org/10.5066/P9DACPCV>.
+
+<br> **Vignette**: <https://fgazzelloni.github.io/oregonfrogs/>
+
+```{r}
+#| eval: false
+#| echo: true
+# install.packages("remotes")
+remotes::install_github("fgazzelloni/oregonfrogs")
+library(oregonfrogs)
+oregonfrogs::oregonfrogs
+```
+
+## Hear Rana Pretiosa {.smaller}
+
+<br> - The frogs calling while partially submerged in the water of a shallow pool.
+
+<br> <audio controls> <source src="sound/Rana_pretiosa1.mp3" type="audio/mpeg">
+Your browser does not support the audio element. </audio> <br> <br> - Rana
+pretiosa as it was picked up across the back.<br> <audio controls>
+<source src="sound/Rana_pretiosa2.mp3" type="audio/mpeg" > Your browser does not
+support the audio element. </audio> <br><br>
+
+> Citation: AmphibiaWeb. 2023. <https://amphibiaweb.org> University of
+> California,Berkeley, CA, USA. Accessed 7 Apr 2023.
+
+
+## What is inside oregonfrogs package? {.scrollable .smaller}
+
+`oregonfrogs` is made of 311 observations, 15 variables including spatial
+information, longitude and latitude, the detection status, if visualised or not,
+or captured, there are information about the habitat and most importantly the
+frequencies emitted by a radio telemetry to monitor the frogs status.
+
+
+```{r}
+library(tidyverse)
+library(oregonfrogs)
+knitr::kable(oregonfrogs)
+```
+
+
+
+
+# Map {.smaller}
+
+The location of `Rana Pretiosa` is the `Crane Prairie Reservoir` artificial lake
+in Oregon, US.
+
+![Crane Prairie Reservoir](images/leaflet-map.png)
+
+```{r}
+#| eval: false
+library(leaflet)
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  setView(lng=-121.800973 , lat =43.787527, zoom = 13) %>%
+  addMarkers(lng=-121.800973 , lat =43.787527, 
+             popup="Crane Prairie Reservoir") %>%
+  addCircleMarkers(lng=oregonfrogs::oregonfrogs$long,
+                   lat=oregonfrogs::oregonfrogs$lat,
+                   radius = 0.1,color = "#32cd32")
+```
+
+# Shiny
+
+Frequency distribution of radio telemetry results about localization of the frogs
+in one area more than onther is very important.
+
+
+![Frequencies](images/shiny-widget.png)
+
+```{r}
+#| eval: true
+library(shiny)
+library(oregonfrogs)
+```
+
+```{r}
+#| out-width: 50%
+#| eval: false
+sliderInput("bins", "Number of bins:", 
+            min = 1, max = 50, value = 10)
+plotOutput("distPlot")
+```
+
+```{r}
+#| eval: false
+# context: server
+# out-width: 50%
+output$distPlot <- renderPlot({
+  x <- oregonfrogs::oregonfrogs$frequency  # Oregonfrogs data
+  bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  hist(x, breaks = bins, col = '#32cd32', border = 'white')
+})
+```
+
+## Project
+
+::: panel-tabset
+### Spatial Data manipulation
+
+```{r}
+#| eval: false
+#| echo: true
+oregonfrogs::longlat_to_utm()
+oregonfrogs::utm_to_longlat()
+```
+
+```{css echo=FALSE}
+.big-code{
+  font-size: 50%  
+}
+```
+
+::: big-code
+::: columns
+::: {.column width="70%"}
+```{r}
+#| echo: true
+#| eval: true
+# Build a tibble with the geo-location information
+frogs_coord <- oregonfrogs_raw %>%
+  dplyr::select(UTME_83, UTMN_83)
+
+# Transform it to lat and long
+frogs_coord <-
+  frogs_coord %>%
+  # transform to simple features as geometry
+  sf::st_as_sf(coords = c(1, 2),
+               crs = "+proj=utm +zone=10") %>%
+  # utm transformation to longlat
+  sf::st_transform(crs = "+proj=longlat +datum=WGS84")  %>%
+  tibble()
+```
+:::
+
+::: {.column width="30%"}
+```{r}
+frogs_coord %>% head(3)
+```
+:::
+:::
+:::
+
+### Data Visualization
+
+```{r}
+library(tidyverse)
+library(igraph)
+library(ggraph)
+
+
+frogs <- oregonfrogs %>%
+  janitor::clean_names() %>%
+  mutate(survey_date = as.Date(survey_date, "%m/%d/%Y"),
+         sex = as.factor(sex)) %>%
+  arrange(doy) %>%
+  mutate(
+    subsite = case_when(
+      subsite == "W Res" ~ "West Reservoir",
+      subsite == "SE Pond" ~ "South East Pond",
+      subsite == "NE Res" ~ "North East Reservoir",
+      subsite == "N Res" ~ "North Reservoir",
+      TRUE ~ subsite
+    )
+  )
+
+network_plot <- frogs %>%
+  filter(detection == "Captured") %>%
+  count(hab_type, water, substrate, frequency) %>%
+  igraph::graph_from_data_frame() %>%
+  ggraph('auto') +
+  geom_edge_fan2(
+    aes(color = rev(stat(index))),
+    alpha = 0.5,
+    strength = 1.2,
+    lineend = "round"
+  ) +
+  ggraph::geom_node_label(aes(label = name),
+                          vjust = 0.5,
+                          hjust = 0.6,
+                          size = 4) +
+  ggraph::scale_edge_colour_distiller(name = "Index",palette = 3) +
+  ggraph::scale_edge_alpha_continuous(name = "Index") +
+  ggraph::theme_graph() +
+  labs(title = "More frogs are captured in shallow water",
+       subtitle = "favourite habitat is pond or reservoir",
+       caption = "made with {ggraph}") +
+  theme(text = element_text(family = "Roboto Condensed"),
+        legend.position ="bottom",
+        plot.margin = unit(c(5,5,5,5),units = "pt"),
+        plot.title = element_text(size=12))
+
+network_plot
+```
+
+### Spatial Modeling
+
+```{r}
+library(ggplot2)
+oregonfrogs_raw %>%
+  dplyr::select(SurveyDate, Frequency, UTME_83, UTMN_83) %>%
+  utm_to_longlat(utm_crs = "+proj=utm +zone=10",
+                 longlat_crs = "+proj=longlat +datum=WGS84") %>%
+  ggplot(aes(x = X, y = Y)) +
+  geom_point(
+    alpha = 0.5,
+    shape = 21,
+    stroke = 0.5,
+    fill = "#32cd32"
+  ) +
+  geom_smooth(color = "#cf5f25", alpha = 0.2) +
+  geom_smooth(method = "lm",
+              color = "#a8bd3a",
+              alpha = 0.2) +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
+```
+:::
+
+
+## and then? {background-color="aquamarine"}
+
+![Estimated locations](images/frogs_location_raster.png)
+
+
+
+##  {background-iframe="https://fgazzelloni.github.io/oregonfrogs/"}
+
+
+
+
+

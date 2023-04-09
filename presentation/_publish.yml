@@ -1,0 +1,4 @@
+- source: presentation.qmd
+  quarto-pub:
+    - id: 28cc840d-a95e-4e75-807d-ec041f2aa99e
+      url: 'https://quartopub.com/sites/fgazzelloni/spatial-modeling-with-oregonfrogs'

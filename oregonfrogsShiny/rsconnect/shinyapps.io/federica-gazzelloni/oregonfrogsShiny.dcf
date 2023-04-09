@@ -1,0 +1,13 @@
+name: oregonfrogsShiny
+title: oregonfrogsShiny
+username:
+account: federica-gazzelloni
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8802833
+bundleId: 7068352
+url: https://federica-gazzelloni.shinyapps.io/oregonfrogsShiny/
+when: 1681076268.23304
+lastSyncTime: 1681076268.23306
+asMultiple: FALSE
+asStatic: FALSE

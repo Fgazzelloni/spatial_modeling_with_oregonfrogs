@@ -1,0 +1,20 @@
+title: oregonfrogs Presentation Template
+author: Federica Gazzelloni
+version: 0.0.1
+contributes:
+  formats: 
+    revealjs:
+      logo: logo.png
+      scrollable: true
+      footer: |
+        Code available on [GitHub](https://github.com/fgazzelloni).
+      theme: oregonfrogs.scss
+      slide-number: c/t
+      show-slide-number: all
+      title-slide-attributes:
+        data-background-color: "#cf5f25"
+      preview-links: true
+
+execute: 
+    cache: true
+

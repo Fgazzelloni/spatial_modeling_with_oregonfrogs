@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*_files
+presentation/presentation_cache
+presentation/presentation_files
