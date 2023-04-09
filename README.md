@@ -12,4 +12,4 @@ This repository contains the material for the [R4DS Project-Club](http://r4ds.io
 
 ### The Video: <https://www.youtube.com/watch?v=KDngQp3h8DU>
 
-<center>![](app-image.png)</center>
+[![](app-image.png)](https://federica-gazzelloni.shinyapps.io/oregonfrogsShiny/)
